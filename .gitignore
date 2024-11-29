@@ -1,8 +1,12 @@
+# the session an user specific data arenot to be shared
 .Rproj.user
 .Rhistory
 .RData
 .Ruserdata
+
+# these are scripts to start ssh-agent and add public keys in Linux
+# they are used for trouble-free git-ops when severeal identifies exist in ~/.ssh folder
 git-*
+
+# avoid POSIT-cloud-related publicaiton folders
 rsconnect/*
-renv/*
-Presentation/*
