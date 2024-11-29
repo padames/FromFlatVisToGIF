@@ -1,0 +1,59 @@
+---
+title: "TimeSeriesVis"
+format: html
+editor: visual
+---
+
+
+```{r loading-ggplot2, echo=FALSE, attr.warning=FALSE, message=FALSE}
+## functional and vectorized single function from 
+## https://stackoverflow.com/a/44660688/1585486
+
+using<-function(...) {
+  libs <- unlist(list(...))
+  req  <- unlist(lapply(libs, require, character.only = TRUE))
+  need <- libs[req == FALSE]
+  if(length(need) > 0){ 
+    install.packages(need)
+    lapply(need, require,character.only = TRUE)
+  }
+}
+
+using("ggplot2", "here")
+```
+
+
+## The problem statement
+
+These examples are re-used from section 2.6.5 of <https://ggplot2-book.org/getting-started#sec-line>.
+
+The dataset called `economics` from the ggplot2 package, has economic data on the US measured over the last 40 years up until 2010. 
+
+
+Let's first make simple time series plots of the continuous variables un
+
+
+```{r running-separate-time-series, echo=TRUE}
+
+ggplot(economics, aes(date, unemploy / pop)) +
+  geom_line()
+ggplot(economics, aes(date, uempmed)) +
+  geom_line()
+```
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+1 + 1
+```
+
+You can add options to executable code like this
+
+```{r}
+#| echo: false
+2 * 2
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).
