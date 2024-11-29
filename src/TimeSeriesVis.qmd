@@ -1,9 +1,8 @@
 ---
-title: "TimeSeriesVis"
+title: "Building up the case for time-dependant visualizations"
 format: html
 editor: visual
 ---
-
 
 ```{r loading-ggplot2, echo=FALSE, attr.warning=FALSE, message=FALSE}
 ## functional and vectorized single function from 
@@ -22,38 +21,50 @@ using<-function(...) {
 using("ggplot2", "here")
 ```
 
-
 ## The problem statement
 
 These examples are re-used from section 2.6.5 of <https://ggplot2-book.org/getting-started#sec-line>.
 
-The dataset called `economics` from the ggplot2 package, has economic data on the US measured over the last 40 years up until 2010. 
+The dataset called `economics` from the ggplot2 package, has economic data on the US measured over the last 40 years up until 2010.
+
+Let's first make simple time series plots of the continuous variable `unemploy / pop` over time. Please observe that a time series always has, well, time in the-axis.
+
+```{r running-separate-time-series-unemployment-rate, echo=TRUE}
+
+ggplot(economics, aes(date, unemploy / pop)) + geom_line()
+```
+
+The variable `unemploy / pop` represents the _"population rate of unemployment as a fraction of the population able to work that is unemployed"_, (<https://www.bls.gov/cps/cps_htgm.htm#definitions>) 
 
 
-Let's first make simple time series plots of the continuous variables un
+Another variable called `uempmed` from this same dataset tracks the unemployment length measured as the median number of weeks a person lasts unemployed.
 
-
-```{r running-separate-time-series, echo=TRUE}
-
-ggplot(economics, aes(date, unemploy / pop)) +
-  geom_line()
+```{r running-separate-time-series-mean-time, echo=TRUE}
 ggplot(economics, aes(date, uempmed)) +
   geom_line()
 ```
 
-## Running Code
 
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+The challenge is to represent both time series in the same scatter plot. In other words how these two variables have evolved over the years. If they are represented on a coordinate plane their intersection represent their values at a point in time.
 
-```{r}
-1 + 1
+To represent those points over time using two mappings from the grammar of graphics, one for the points called appropriately `geom_point` and another for their sequential trajectory as they appear in the dataset, ordered by time, called a `geom_path`. The figure below shows such a graph.
+
+
+```{r path-plot-first-attempt}
+ggplot(economics, aes(unemploy / pop, uempmed)) + 
+  geom_path() +
+  geom_point()
 ```
 
-You can add options to executable code like this
+The obstacle to understand this plot is in the encoding of time flow with the lines. It is not clear where the points corresponding to the first years the latter ones are, or where all the years in between have happened. 
 
-```{r}
-#| echo: false
-2 * 2
+This can be addressed by adding another mapping from point colour to year in the `geom_path` mapping.   
+
+```{r path-plot-time-direction-encoded-to-colour}
+year <- function(x) as.POSIXlt(x)$year + 1900
+ggplot(economics, aes(unemploy / pop, uempmed)) + 
+  geom_path(colour = "grey50") +
+  geom_point(aes(colour = year(date)))
 ```
 
-The `echo: false` option disables the printing of code (only output is displayed).
+The colour property in the `geom_path` is a mapping that gives each line created between points a unique value indicated by the colour specification _"grey50"_. 
