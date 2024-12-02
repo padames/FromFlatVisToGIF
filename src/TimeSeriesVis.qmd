@@ -25,7 +25,7 @@ using("ggplot2", "here", "plotly")
 
 These examples are re-used from section 2.6.5 of <https://ggplot2-book.org/getting-started#sec-line>.
 
-The dataset called `economics` from the ggplot2 package, has economic data on the US measured over the last 40 years up until 2010.
+The dataset called `economics` from the ggplot2 package, has economic data on the US measured over the last 40 years up until 2015.
 
 Here is a brief look at the first 5 out of `r nrow(economics)` rows of the dataframe `economics`.
 
@@ -36,7 +36,9 @@ knitr::kable(data)
 
 Let's first make a simple time series plot of the unemployment rate. This is a continuous variable that is computed with the ratio `unemploy / pop`. 
 
-In ggplot2 a frame defines the first mapping from variables to a space where the data will be represented as glyphs. It is created with the function `aes()`. The obvious frame for this plot is defined by the two variables `date` and `unemploy / pop`. They are mapped to the x and y coordinates of a frame. The glyphs drawn over this frame will be lines between the data points located in the frame, they are created with the function `geom_line()`.
+In ggplot2 a frame defines the first mapping from variables to a space where the data will be represented. It is created with the function `aes()`. 
+The obvious frame for this plot is defined by the two variables `date` and `unemploy / pop`. They are mapped to the x and y coordinates of a 2-D plane. The glyphs drawn over this frame will be lines between the data points located in the frame, they are created with the function `geom_line()`.
+This function defines a layer over the frame.
 
 ```{r running-separate-time-series-unemployment-rate, echo=TRUE}
 ggplot(data = economics, mapping = aes(x = date, y = unemploy / pop)) +
@@ -46,17 +48,19 @@ ggplot(data = economics, mapping = aes(x = date, y = unemploy / pop)) +
 Technically speaking `unemploy / pop` represents the _"population rate of unemployment as a fraction of the population able to work that is unemployed"_, (<https://www.bls.gov/cps/cps_htgm.htm#definitions>) 
 
 
-Another variable called `uempmed` from this same dataset tracks the unemployment length measured as the median number of weeks a person lasts unemployed.
+Another variable called `uempmed` from the same dataset tracks the median length of time in weeks of unemployment.
 
 ```{r running-separate-time-series-mean-time, echo=TRUE}
 ggplot(economics, aes(date, uempmed)) +
   geom_line()
 ```
 
-From these two plots one can reason about the recent trend towards longer median unemployment time in the decade of 2010. There are also cycles of between 5 and 10 years of peak unemployement rates.
+From these two plots one can observe the recent trend towards longer median unemployment time in the decade of 2010. 
+There are also cycles of between 5 and 10 years of peak unemployment rates.
 
 An interesting question is how these two time series correlate over time. 
-In ggplot2, the frame for this new representation can be defined by a mapping of each variable to the x and y coordinate of the plane. The glyphs are of two kinds, the variables are represented via the `geom_point`, while their sequential trajectory as they appear in the dataset, ordered by time, is captured by the mapping called `geom_path`. The figure below shows such a graph.
+In ggplot2, the frame for this new representation can be defined by a mapping of each variable to the x and y coordinates of the plane. 
+The glyphs are of two kinds, the variables are represented with the layer `geom_point`, while their sequential trajectory, ordered by time, is captured by the layer `geom_path`. The figure below shows such a graph.
 
 
 ```{r path-plot-first-attempt}
@@ -65,9 +69,13 @@ ggplot(economics, aes(unemploy / pop, uempmed)) +
   geom_point()
 ```
 
-It is hard to understand the direction of the flow of time from the lines alone. For example, it is difficult to visualize where the first, the last, or any years in between have happened. 
+It is hard to understand the direction of time from the lines alone. 
+For example, it is difficult to visualize where the first, the last, or any years in between have happened. 
 
-This can be addressed by adding another mapping from the property colour to the variable year in the `geom_point` mapping. This is done with a default colour scale chosen by R.   
+This can be addressed by adding a mapping from the property colour to the variable year in the layer `geom_point`. 
+R uses a default colour scale to assign specific colours from a colour palette to years.   
+The ggplot2 package defines the function `aes()` to create this many to many mapping. 
+
 
 ```{r path-plot-time-direction-encoded-to-colour}
 year <- function(x) as.POSIXlt(x)$year + 1900
@@ -76,9 +84,14 @@ ggplot(economics, aes(unemploy / pop, uempmed)) +
   geom_point(aes(colour = year(date)))
 ```
 
-The colour property in the `geom_path` is a mapping that gives each line created between points a unique value indicated by the colour specification _"grey50"_. It is a many to one mapping, instead of the many to many mapping of the `geom_point`.
+The layer `geom_path` has a mapping from each line created between points the same colour value indicated by the specification _"grey50"_. 
+The syntax does not require the use of the `aes()` function.
+It is a many to one mapping.
 
-The animation that helps explain the flow of time for the two variables, unemployment rate and median unemployment length in weeks is shown below using the package plotly and the additional mapping from the property frame to the variable date. 
+We can get a more sophisticated visualization by using animation to explain the flow of time for how the two variables change simultaneously.
+In the following plot, the values of unemployment rate and median unemployment length in weeks are displayed for every year. 
+By pressing the PLAY button, one sees the points for each year over the line trajectory, from beginning to end.
+One can use the slider to visualize the position of the variables for any given year.
 
 
 ```{r annimation, echo=TRUE}
@@ -107,3 +120,5 @@ fig <- fig %>%
                         font = list(color="red")))
 fig
 ```
+
+After observing where the data lies between 2009 and 2015, there is no doubt that at any value of the unemployment rate, the median unemployment length in weeks has increased over and above any value of the previous 35 years in the USA according to this dataset.  
