@@ -9,4 +9,4 @@
 git-*
 
 # avoid POSIT-cloud-related publicaiton folders
-#rsconnect/*
+rsconnect/*
