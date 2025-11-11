@@ -2,7 +2,6 @@
 title: "A case for doing a data animation"
 author: "Pablo Adames"
 date: "Nov-24-2024"
-license: "http://creativecommons.org/licenses/by/4.0/"
 date-modified: "Nov-19-2025"
 format: html
 ---
@@ -119,3 +118,8 @@ fig
 From watching the motion of the annual data after pressing the Play button, one gets the sense that for the first 41 years the values of these two time series remained within the quadrant below the 15 week and to the left of 4% unemployment rate except for the years 1982 and 83. Then after 2009 the median unemployment length in weeks has increased over and above any value of the previous years in the USA according to this dataset.
 
 The animation has achieved the introduction of a new dimension to represent the flow of time over the bi-dimensional plane representing the two time observed variables. In non-digital media the only alternative we would have is representing time progression with other dimensions like point color intensity or perhaps point diameter.
+
+
+# License
+
+<a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
