@@ -2,7 +2,7 @@
 title: "A case for doing a data animation"
 author: "Pablo Adames"
 date: "Nov-24-2024"
-date-modified: "Nov-19-2025"
+date-modified: "Nov-11-2025"
 format: html
 ---
 
